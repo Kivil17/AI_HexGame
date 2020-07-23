@@ -6,6 +6,17 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import ai.Cella;
+import it.unical.mat.embasp.base.Handler;
+import it.unical.mat.embasp.base.InputProgram;
+import it.unical.mat.embasp.base.Output;
+import it.unical.mat.embasp.languages.asp.ASPInputProgram;
+import it.unical.mat.embasp.languages.asp.ASPMapper;
+import it.unical.mat.embasp.languages.asp.AnswerSet;
+import it.unical.mat.embasp.languages.asp.AnswerSets;
+import it.unical.mat.embasp.platforms.desktop.DesktopHandler;
+import it.unical.mat.embasp.specializations.dlv.desktop.DLVDesktopService;
+
 /**
  * The JHex class is the main class of the JHex hex game.
  * The JHex class can be used as either an applet or a
@@ -15,7 +26,10 @@ import javax.swing.*;
 
 public class JHex extends JApplet
 {
-
+	
+	private static String encodingResource="encodings/HexGame";
+	private static Handler handler;
+	
 	ButtonPanel buttonPanel;
 	PlayerPanel playerPanel;
 //	HexCanvas hexCanvas;
@@ -50,10 +64,17 @@ public class JHex extends JApplet
 	 */
 
 	public static void main(String args[] ) {
+		
+		
+		
 		JHexFrame app = new JHexFrame("JHex");
 		app.setSize( 600,600 );
 		app.show();
+		
+		
 	}
+	
+	
 
 	/*public void undo() {
 		Globals.gameManager.undo();

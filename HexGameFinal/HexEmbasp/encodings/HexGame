@@ -1,5 +1,5 @@
 pos(0..10).
-colore(0). colore(1).
+colore(1). colore(2).
 
 cell(X,Y,C) | nocell(X,Y,C) :- pos(X), pos(Y), colore(C).
 

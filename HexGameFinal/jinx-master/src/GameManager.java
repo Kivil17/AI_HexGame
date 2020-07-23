@@ -6,6 +6,19 @@
  */
 
 import java.lang.*;
+import java.util.ArrayList;
+
+import ai.Cella;
+import it.unical.mat.embasp.base.Handler;
+import it.unical.mat.embasp.base.InputProgram;
+import it.unical.mat.embasp.base.Output;
+import it.unical.mat.embasp.languages.asp.ASPInputProgram;
+import it.unical.mat.embasp.languages.asp.ASPMapper;
+import it.unical.mat.embasp.languages.asp.AnswerSet;
+import it.unical.mat.embasp.languages.asp.AnswerSets;
+import it.unical.mat.embasp.platforms.desktop.DesktopHandler;
+import it.unical.mat.embasp.specializations.dlv.desktop.DLVDesktopService;
+
 import java.awt.*;
 
 /**
@@ -20,6 +33,13 @@ import java.awt.*;
 
 public class GameManager extends Thread {
 
+	private static String encodingResource="HexEmbasp/encodings/HexGame";
+	private static Handler handler;
+	
+	
+	ArrayList<Cella> c= new ArrayList<Cella>();
+	Cella cella=null;
+	
 	HexPlayer RedPlayer = null;
 	HexPlayer BluePlayer = null;
 	HexPlayer CurrentPlayer = null;
@@ -47,6 +67,9 @@ public class GameManager extends Thread {
 	 */
 
 	public GameManager( HexCanvas hc, PlayerPanel pp ) {
+		
+		
+		
 		playerPanel = pp;
 		hexCanvas = hc;
 		String rp = pp.getRedPlayer();
@@ -159,6 +182,43 @@ public class GameManager extends Thread {
 	 */
 
     public void run() {
+    	
+    	handler = new DesktopHandler(new DLVDesktopService("HexEmbasp/lib/dlv.mingw.exe"));
+		
+		InputProgram  program = new ASPInputProgram();
+		program.addFilesPath(encodingResource);
+		
+		handler.addProgram(program);
+		
+		try {
+			ASPMapper.getInstance().registerClass(Cella.class);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Output o =  handler.startSync();
+		
+		AnswerSets answers = (AnswerSets) o;
+		
+		int n=0;
+		for(AnswerSet a:answers.getAnswersets()){
+			// System.out.println("AS n.: " + ++n + ": " + a);
+			try {
+
+				for(Object obj:a.getAtoms()){
+					if(obj instanceof Cella)  {
+						Cella cella = (Cella) obj;
+						System.out.print(cella + " ");
+					}
+				}
+				System.out.println();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 			
+		}
+    	
+		Point p2;
 		Point p;
 		while( true ) {
 			
@@ -170,8 +230,11 @@ public class GameManager extends Thread {
 				continue;
 			}
 			// Get a move.
-			p = CurrentPlayer.nextMove( Globals.gameBoard,
-                                                    gameState );
+			p = CurrentPlayer.nextMove( Globals.gameBoard,  gameState);
+			
+			if(playerPanel.getRedPlayer().equals("DLV") || playerPanel.getBluePlayer().equals("DLV"))
+				p2 = RandomPlayer.nextMove2( Globals.gameBoard ,gameState, program);
+			
 			if( p == null ) {
 				System.out.println("nextMove returned NULL.");
 				continue;
@@ -202,6 +265,15 @@ public class GameManager extends Thread {
 				System.out.println("WIN!");
 				playerPanel.gameWon( i );
 				won = true;
+			}
+			
+			try {
+				Globals.gameBoard.trovaFatti(program, cella, Globals.gameBoard, gameState);
+				
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			
 			Globals.gameBoard.prMat2(); //chiama la stampa in GameBoard

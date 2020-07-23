@@ -1,5 +1,8 @@
 import java.util.Arrays;
 
+import ai.Cella;
+import it.unical.mat.embasp.base.InputProgram;
+
 /* * GameBoard.java
  *
  * Michael Closson
@@ -291,6 +294,28 @@ public class GameBoard {
             for (int x = 0; x < iRedWidth; x++) {
                 for (int y = 0; y < iBlueWidth; y++) {
                     System.out.print(board[x][y]+" ");
+                }
+                System.out.println("");
+            }
+        }
+        
+        public void trovaFatti(InputProgram program, Cella cella, GameBoard gb, GameState gs)
+        {
+        	for (int x = 0; x < iRedWidth; x++) {
+                for (int y = 0; y < iBlueWidth; y++) {
+                    try {
+						//program.addObjectInput(new Cella(cella.getX(),cella.getY(),cella.getColore()));
+						//program.addObjectInput(new Cella(cella.setX(x),cella.setY(y),cella.setColore(board[x][y])));
+                    	if(isOccupied(x, y))
+                    		program.addObjectInput(new Cella(x,y,board[x][y]));
+                    	
+						RandomPlayer rp= new RandomPlayer();
+						rp.nextMove2(gb, gs, program);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                    	
                 }
                 System.out.println("");
             }
