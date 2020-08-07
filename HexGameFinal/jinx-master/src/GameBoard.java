@@ -308,9 +308,7 @@ public class GameBoard {
 						//program.addObjectInput(new Cella(cella.setX(x),cella.setY(y),cella.setColore(board[x][y])));
                     	if(isOccupied(x, y))
                     		program.addObjectInput(new Cella(x,y,board[x][y]));
-                    	
-						RandomPlayer rp= new RandomPlayer();
-						rp.nextMove2(gb, gs, program);
+                    
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

@@ -183,6 +183,11 @@ public class GameManager extends Thread {
 
     public void run() {
     	
+    	//HO TOLTO LE ISTANZE DI DLV PER METTERLE DIRETTAMENTE IN RANDOM PLAYER 
+    	
+    	/*Point p2;
+    	Point p3;
+    	
     	handler = new DesktopHandler(new DLVDesktopService("HexEmbasp/lib/dlv.mingw.exe"));
 		
 		InputProgram  program = new ASPInputProgram();
@@ -201,26 +206,40 @@ public class GameManager extends Thread {
 		
 		AnswerSets answers = (AnswerSets) o;
 		
-		int n=0;
+		
+		/*if(playerPanel.getRedPlayer().equals("DLV") || playerPanel.getBluePlayer().equals("DLV"))
+			p2 = RandomPlayer.nextMove2( Globals.gameBoard ,gameState, program);*/
+	
+		/*int n=0;
 		for(AnswerSet a:answers.getAnswersets()){
-			// System.out.println("AS n.: " + ++n + ": " + a);
+			 System.out.println("AS n.: " + ++n + ": " + a);
 			try {
 
 				for(Object obj:a.getAtoms()){
 					if(obj instanceof Cella)  {
 						Cella cella = (Cella) obj;
+						System.out.print(cella.getX() + cella.getY());
+						p3 = RandomPlayer.nextMove3(cella.getX(),cella.getY());
 						System.out.print(cella + " ");
+						p3 = CurrentPlayer.nextMove( Globals.gameBoard,  gameState);
+						hexCanvas.markCell( cella.getX(), cella.getY(), 2 );
+						Globals.gameBoard.move(cella.getX(), cella.getY(), 2);
+						break;
 					}
 				}
 				System.out.println();
 			} catch (Exception e) {
 				e.printStackTrace();
-			} 			
-		}
+			}
+			
+			break;
+		}*/
     	
-		Point p2;
+		
 		Point p;
 		while( true ) {
+			
+			
 			
 			if( won ) {
 				try {
@@ -232,8 +251,9 @@ public class GameManager extends Thread {
 			// Get a move.
 			p = CurrentPlayer.nextMove( Globals.gameBoard,  gameState);
 			
-			if(playerPanel.getRedPlayer().equals("DLV") || playerPanel.getBluePlayer().equals("DLV"))
-				p2 = RandomPlayer.nextMove2( Globals.gameBoard ,gameState, program);
+			// NEXT MOVE 2 E 3 NON CI SERVONO PIU PERCHE FACCIAMO LAVORARE IL MECCANISCO PRINCIPALE DEL GIOCO SU RANDOM PLAYERCHIAMANDO POI DLV AL SUO INTERNO
+			//if(playerPanel.getRedPlayer().equals("DLV") || playerPanel.getBluePlayer().equals("DLV"))
+				//p2 = RandomPlayer.nextMove2( Globals.gameBoard ,gameState, program);
 			
 			if( p == null ) {
 				System.out.println("nextMove returned NULL.");
@@ -267,14 +287,7 @@ public class GameManager extends Thread {
 				won = true;
 			}
 			
-			try {
-				Globals.gameBoard.trovaFatti(program, cella, Globals.gameBoard, gameState);
-				
-				
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 			
 			Globals.gameBoard.prMat2(); //chiama la stampa in GameBoard
 		}
